@@ -232,3 +232,22 @@ direction_html = """<div style="display:flex;align-items:center;justify-content:
 </div>"""
 
 st.markdown(direction_html, unsafe_allow_html=True)
+
+# ACTIVOS
+st.subheader("ASSET SIGNALS")
+
+assets = ["GOLD", "SILVER", "NQ100", "US30", "BTC"]
+
+cols = st.columns(5)
+
+for col, asset in zip(cols, assets):
+    with col:
+        asset_html = f"""<div style="background:#090909;border:1px solid #332A10;border-radius:8px;padding:16px 8px;text-align:center;">
+<div style="color:#D4AF37;font-size:12px;letter-spacing:2px;font-weight:bold;margin-bottom:14px;">{asset}</div>
+<div style="display:flex;gap:4px;justify-content:center;">
+<div style="flex:1;padding:8px 2px;border:1px solid #222222;color:#555555;font-size:9px;">VENTA</div>
+<div style="flex:1;padding:8px 2px;border:1px solid #222222;color:#555555;font-size:9px;">NEUTRAL</div>
+<div style="flex:1;padding:8px 2px;border:1px solid #D4AF37;color:#D4AF37;background:#171306;font-size:9px;font-weight:bold;box-shadow:0 0 10px rgba(212,175,55,0.12);">COMPRA</div>
+</div>
+</div>"""
+        st.markdown(asset_html, unsafe_allow_html=True)
