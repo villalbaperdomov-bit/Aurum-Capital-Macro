@@ -7,186 +7,201 @@ st.set_page_config(
     layout="wide"
 )
 
-# =========================
 # ESTILO
-# =========================
 st.markdown("""
 <style>
-    .stApp {
-        background: #05070D;
-        color: #F5F1E8;
-    }
+.stApp {
+    background-color: #050505;
+    color: #E8E8E8;
+}
 
-    .main-title {
-        font-size: 32px;
-        font-weight: 700;
-        letter-spacing: 3px;
-        color: #D4AF37;
-        margin-bottom: 0;
-    }
+h1, h2, h3 {
+    color: #D4AF37 !important;
+}
 
-    .subtitle {
-        color: #8E8E8E;
-        font-size: 13px;
-        letter-spacing: 2px;
-        margin-bottom: 25px;
-    }
+.metric-card {
+    background-color: #0D0D0D;
+    border: 1px solid #3A3218;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+}
 
-    .card {
-        background: #0B0E15;
-        border: 1px solid #29251A;
-        border-radius: 12px;
-        padding: 20px;
-        margin-bottom: 15px;
-    }
+.metric-title {
+    color: #888888;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
 
-    .metric-label {
-        color: #888888;
-        font-size: 12px;
-        letter-spacing: 2px;
-    }
+.metric-value {
+    color: #D4AF37;
+    font-size: 28px;
+    font-weight: bold;
+}
 
-    .metric-value {
-        color: #D4AF37;
-        font-size: 30px;
-        font-weight: 700;
-    }
-
-    .signal {
-        text-align: center;
-        font-size: 28px;
-        font-weight: 700;
-        color: #D4AF37;
-        letter-spacing: 4px;
-        padding: 10px;
-    }
-
-    .justification {
-        color: #C7C7C7;
-        line-height: 1.7;
-        font-size: 14px;
-        border-left: 2px solid #D4AF37;
-        padding-left: 15px;
-    }
-
-    h2, h3 {
-        color: #D4AF37 !important;
-        letter-spacing: 1px;
-    }
+.signal {
+    background-color: #0D0D0D;
+    border: 1px solid #D4AF37;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    color: #D4AF37;
+    font-size: 30px;
+    font-weight: bold;
+}
 </style>
 """, unsafe_allow_html=True)
 
-# =========================
 # ENCABEZADO
-# =========================
-st.markdown(
-    '<div class="main-title">AURUM CAPITAL — MACRO INTELLIGENCE</div>',
-    unsafe_allow_html=True
-)
+st.title("AURUM CAPITAL — MACRO INTELLIGENCE")
+st.caption("JARVIS MACROECONOMIC COMMAND CENTER")
 
-st.markdown(
-    '<div class="subtitle">JARVIS MACROECONOMIC COMMAND CENTER</div>',
-    unsafe_allow_html=True
-)
-
-# =========================
 # MÉTRICAS
-# =========================
-c1, c2, c3, c4 = st.columns(4)
-
-with c1:
-    st.markdown(
-        '<div class="card"><div class="metric-label">PCE ACTUAL</div>'
-        '<div class="metric-value">3.70%</div></div>',
-        unsafe_allow_html=True
-    )
-
-with c2:
-    st.markdown(
-        '<div class="card"><div class="metric-label">DESEMPLEO</div>'
-        '<div class="metric-value">4.10%</div></div>',
-        unsafe_allow_html=True
-    )
-
-with c3:
-    st.markdown(
-        '<div class="card"><div class="metric-label">JOLTS</div>'
-        '<div class="metric-value">7,271</div></div>',
-        unsafe_allow_html=True
-    )
-
-with c4:
-    st.markdown(
-        '<div class="card"><div class="metric-label">MACRO BIAS</div>'
-        '<div class="metric-value">BAJISTA</div></div>',
-        unsafe_allow_html=True
-    )
-
-# =========================
-# GRÁFICOS
-# =========================
-col1, col2 = st.columns(2)
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.markdown("### INFLACIÓN — PCE")
+    st.markdown("""
+    <div class="metric-card">
+        <div class="metric-title">PCE ACTUAL</div>
+        <div class="metric-value">3.70%</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    fig_pce = go.Figure()
+with col2:
+    st.markdown("""
+    <div class="metric-card">
+        <div class="metric-title">DESEMPLEO</div>
+        <div class="metric-value">4.10%</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    fig_pce.add_trace(
+with col3:
+    st.markdown("""
+    <div class="metric-card">
+        <div class="metric-title">JOLTS</div>
+        <div class="metric-value">7,271</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col4:
+    st.markdown("""
+    <div class="metric-card">
+        <div class="metric-title">MACRO BIAS</div>
+        <div class="metric-value">BAJISTA</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+st.divider()
+
+# GRÁFICOS
+left, right = st.columns(2)
+
+with left:
+    st.subheader("INFLACIÓN — PCE")
+
+    fig = go.Figure()
+
+    fig.add_trace(
         go.Scatter(
             x=["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
-            y=[3.8, 3.75, 3.82, 3.78, 3.72, 3.70],
+            y=[3.80, 3.75, 3.82, 3.78, 3.72, 3.70],
             mode="lines+markers",
             name="PCE"
         )
     )
 
-    fig_pce.add_hline(
+    fig.add_hline(
         y=2.0,
         line_dash="dash",
         annotation_text="TARGET 2%"
     )
 
-    fig_pce.update_layout(
+    fig.update_layout(
         height=350,
-        paper_bgcolor="#05070D",
-        plot_bgcolor="#05070D",
-        font=dict(color="#BBBBBB"),
-        margin=dict(l=20, r=20, t=20, b=20),
-        xaxis=dict(showgrid=False),
-        yaxis=dict(gridcolor="#202020")
+        paper_bgcolor="#050505",
+        plot_bgcolor="#050505",
+        font=dict(color="#CCCCCC")
     )
 
-    st.plotly_chart(fig_pce, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)
 
-with col2:
-    st.markdown("### MERCADO LABORAL — DESEMPLEO")
+with right:
+    st.subheader("MERCADO LABORAL — DESEMPLEO")
 
-    fig_unemployment = go.Figure()
+    fig = go.Figure()
 
-    fig_unemployment.add_trace(
+    fig.add_trace(
         go.Scatter(
             x=["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
-            y=[3.9, 4.0, 4.0, 4.1, 4.1, 4.1],
+            y=[3.90, 4.00, 4.00, 4.10, 4.10, 4.10],
             mode="lines+markers",
-            name="Unemployment"
+            name="Desempleo"
         )
     )
 
-    fig_unemployment.add_hline(
+    fig.add_hline(
         y=3.5,
         line_dash="dash",
         annotation_text="TARGET 3.5%"
     )
 
-    fig_unemployment.update_layout(
-    height=350,
-    paper_bgcolor="#05070D",
-    plot_bgcolor="#05070D",
-    font=dict(color="#BBBBBB"),
-    margin=dict(l=20, r=20, t=20, b=20),
-    xaxis=dict(showgrid=False),
-    yaxis=dict(gridcolor="#202020")
-),
-        paper_bgcolor="#05070D",
-        plot_bgcolor
+    fig.update_layout(
+        height=350,
+        paper_bgcolor="#050505",
+        plot_bgcolor="#050505",
+        font=dict(color="#CCCCCC")
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
+st.divider()
+
+# MATRIZ MACRO
+st.subheader("MACRO REGIME MATRIX")
+
+fig = go.Figure()
+
+fig.add_trace(
+    go.Bar(
+        name="Previous",
+        y=["Inflation", "Unemployment"],
+        x=[3.72, 4.10],
+        orientation="h"
+    )
+)
+
+fig.add_trace(
+    go.Bar(
+        name="Target",
+        y=["Inflation", "Unemployment"],
+        x=[2.00, 3.50],
+        orientation="h"
+    )
+)
+
+fig.add_trace(
+    go.Bar(
+        name="Current",
+        y=["Inflation", "Unemployment"],
+        x=[3.70, 4.10],
+        orientation="h"
+    )
+)
+
+fig.update_layout(
+    barmode="group",
+    height=300,
+    paper_bgcolor="#050505",
+    plot_bgcolor="#050505",
+    font=dict(color="#CCCCCC")
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+# DIRECCIÓN GENERAL
+st.subheader("GENERAL MARKET DIRECTION")
+
+st.markdown(
+    '<div class="signal">BAJISTA</div>',
+    unsafe_allow_html=True
+)
