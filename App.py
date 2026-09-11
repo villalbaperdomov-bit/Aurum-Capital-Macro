@@ -161,91 +161,31 @@ st.subheader("MACRO REGIME MATRIX")
 
 def macro_row(nombre, anterior, objetivo, actual, unidad):
     maximo = max(anterior, actual, objetivo if objetivo else 0) * 1.25
-
-    anterior_pct = (anterior / maximo) * 100
-    actual_pct = (actual / maximo) * 100
-
-    objetivo_html = ""
+    anterior_pct = anterior / maximo * 100
+    actual_pct = actual / maximo * 100
 
     if objetivo is not None:
-        objetivo_pct = (objetivo / maximo) * 100
-        objetivo_html = f"""
-        <div style="
-            position:absolute;
-            left:{objetivo_pct}%;
-            top:-5px;
-            bottom:-5px;
-            width:2px;
-            background:#FFFFFF;
-        "></div>
-        """
+        objetivo_pct = objetivo / maximo * 100
+        objetivo_html = f'<div style="position:absolute;left:{objetivo_pct}%;top:0;bottom:0;width:2px;background:#FFFFFF;"></div>'
+    else:
+        objetivo_html = ""
 
-    return f"""
-    <div style="margin-bottom:28px;">
-
-        <div style="
-            display:flex;
-            justify-content:space-between;
-            margin-bottom:7px;
-            color:#D4AF37;
-            font-size:13px;
-            font-weight:bold;
-        ">
-            <span>{nombre}</span>
-            <span>
-                ANTERIOR: {anterior:,.2f}{unidad}
-                &nbsp;&nbsp;|&nbsp;&nbsp;
-                ACTUAL: {actual:,.2f}{unidad}
-            </span>
-        </div>
-
-        <div style="
-            position:relative;
-            height:30px;
-            background:#111111;
-            border:1px solid #3A3218;
-            border-radius:4px;
-            overflow:visible;
-        ">
-
-            {objetivo_html}
-
-            <div style="
-                position:absolute;
-                left:0;
-                top:6px;
-                height:18px;
-                width:{anterior_pct}%;
-                background:#6B5A20;
-            "></div>
-
-            <div style="
-                position:absolute;
-                left:0;
-                top:10px;
-                height:10px;
-                width:{actual_pct}%;
-                background:#D4AF37;
-            "></div>
-
-        </div>
-
-        <div style="
-            display:flex;
-            justify-content:space-between;
-            margin-top:6px;
-            color:#777777;
-            font-size:10px;
-        ">
-            <span>ANTERIOR</span>
-            <span>
-                {"OBJETIVO: " + f"{objetivo:,.2f}{unidad}" if objetivo is not None else "SIN OBJETIVO"}
-            </span>
-            <span>ACTUAL</span>
-        </div>
-
-    </div>
-    """
+    return f"""<div style="margin-bottom:28px;">
+<div style="display:flex;justify-content:space-between;margin-bottom:7px;color:#D4AF37;font-size:13px;font-weight:bold;">
+<span>{nombre}</span>
+<span>ANTERIOR: {anterior:,.2f}{unidad} &nbsp;&nbsp;|&nbsp;&nbsp; ACTUAL: {actual:,.2f}{unidad}</span>
+</div>
+<div style="position:relative;height:30px;background:#111111;border:1px solid #3A3218;border-radius:4px;">
+{objetivo_html}
+<div style="position:absolute;left:0;top:6px;height:18px;width:{anterior_pct}%;background:#6B5A20;"></div>
+<div style="position:absolute;left:0;top:10px;height:10px;width:{actual_pct}%;background:#D4AF37;"></div>
+</div>
+<div style="display:flex;justify-content:space-between;margin-top:6px;color:#777777;font-size:10px;">
+<span>ANTERIOR</span>
+<span>{"OBJETIVO: " + f"{objetivo:,.2f}{unidad}" if objetivo is not None else "SIN OBJETIVO"}</span>
+<span>ACTUAL</span>
+</div>
+</div>"""
 
 
 st.markdown(
