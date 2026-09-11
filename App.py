@@ -159,75 +159,127 @@ st.divider()
 # MATRIZ MACRO
 st.subheader("MACRO REGIME MATRIX")
 
-fig = go.Figure()
+def macro_row(nombre, anterior, objetivo, actual, unidad):
+    maximo = max(anterior, actual, objetivo if objetivo else 0) * 1.25
 
-# INFLACIÓN
-fig.add_trace(
-    go.Bar(
-        name="Anterior",
-        y=["Inflación", "Desempleo", "JOLTS"],
-        x=[3.72, 4.10, 7182],
-        orientation="h",
-        marker_color="#6B5A20"
-    )
+    anterior_pct = (anterior / maximo) * 100
+    actual_pct = (actual / maximo) * 100
+
+    objetivo_html = ""
+
+    if objetivo is not None:
+        objetivo_pct = (objetivo / maximo) * 100
+        objetivo_html = f"""
+        <div style="
+            position:absolute;
+            left:{objetivo_pct}%;
+            top:-5px;
+            bottom:-5px;
+            width:2px;
+            background:#FFFFFF;
+        "></div>
+        """
+
+    return f"""
+    <div style="margin-bottom:28px;">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:7px;
+            color:#D4AF37;
+            font-size:13px;
+            font-weight:bold;
+        ">
+            <span>{nombre}</span>
+            <span>
+                ANTERIOR: {anterior:,.2f}{unidad}
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+                ACTUAL: {actual:,.2f}{unidad}
+            </span>
+        </div>
+
+        <div style="
+            position:relative;
+            height:30px;
+            background:#111111;
+            border:1px solid #3A3218;
+            border-radius:4px;
+            overflow:visible;
+        ">
+
+            {objetivo_html}
+
+            <div style="
+                position:absolute;
+                left:0;
+                top:6px;
+                height:18px;
+                width:{anterior_pct}%;
+                background:#6B5A20;
+            "></div>
+
+            <div style="
+                position:absolute;
+                left:0;
+                top:10px;
+                height:10px;
+                width:{actual_pct}%;
+                background:#D4AF37;
+            "></div>
+
+        </div>
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            margin-top:6px;
+            color:#777777;
+            font-size:10px;
+        ">
+            <span>ANTERIOR</span>
+            <span>
+                {"OBJETIVO: " + f"{objetivo:,.2f}{unidad}" if objetivo is not None else "SIN OBJETIVO"}
+            </span>
+            <span>ACTUAL</span>
+        </div>
+
+    </div>
+    """
+
+
+st.markdown(
+    macro_row("INFLACIÓN — PCE", 3.72, 2.00, 3.70, "%"),
+    unsafe_allow_html=True
 )
 
-fig.add_trace(
-    go.Bar(
-        name="Objetivo",
-        y=["Inflación", "Desempleo", "JOLTS"],
-        x=[2.00, 3.50, 0],
-        orientation="h",
-        marker_color="#D4AF37"
-    )
+st.markdown(
+    macro_row("DESEMPLEO", 4.10, 3.50, 4.10, "%"),
+    unsafe_allow_html=True
 )
 
-fig.add_trace(
-    go.Bar(
-        name="Actual",
-        y=["Inflación", "Desempleo", "JOLTS"],
-        x=[3.70, 4.10, 7271],
-        orientation="h",
-        marker_color="#F5D76E"
-    )
+st.markdown(
+    macro_row("JOLTS", 7182, None, 7271, ""),
+    unsafe_allow_html=True
 )
 
-fig.update_layout(
-    barmode="group",
-    height=350,
-    paper_bgcolor="#050505",
-    plot_bgcolor="#050505",
-    font=dict(color="#CCCCCC"),
-    xaxis=dict(
-        showgrid=False
-    ),
-    yaxis=dict(
-        showgrid=False
-    ),
-    legend=dict(
-        orientation="h",
-        yanchor="bottom",
-        y=1.02,
-        xanchor="right",
-        x=1
-    ),
-    margin=dict(
-        l=20,
-        r=20,
-        t=60,
-        b=20
-    )
-)
-
-st.plotly_chart(fig, use_container_width=True)
-
-# VALORES DE REFERENCIA
 st.markdown(
     """
-    **Inflación:** Anterior 3.72% · Objetivo 2.00% · Actual 3.70%  
-    **Desempleo:** Anterior 4.10% · Objetivo 3.50% · Actual 4.10%  
-    **JOLTS:** Anterior 7,182 · Actual 7,271
-    """
+    <div style="
+        margin-top:15px;
+        padding:12px;
+        border-top:1px solid #29251A;
+        color:#888888;
+        font-size:11px;
+    ">
+        <span style="color:#6B5A20;">■</span> ANTERIOR
+        &nbsp;&nbsp;&nbsp;
+        <span style="color:#D4AF37;">■</span> ACTUAL
+        &nbsp;&nbsp;&nbsp;
+        <span style="color:#FFFFFF;">│</span> OBJETIVO
+    </div>
+    """,
+    unsafe_allow_html=True
 )
 
 # DIRECCIÓN GENERAL
