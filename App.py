@@ -180,6 +180,14 @@ with col2:
     )
 
     fig_unemployment.update_layout(
+    height=350,
+    paper_bgcolor="#05070D",
+    plot_bgcolor="#05070D",
+    font=dict(color="#BBBBBB"),
+    margin=dict(l=20, r=20, t=20, b=20),
+    xaxis=dict(showgrid=False),
+    yaxis=dict(gridcolor="#202020")
+)
         height=350,
         paper_bgcolor="#05070D",
         plot_bgcolor
