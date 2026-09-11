@@ -161,42 +161,74 @@ st.subheader("MACRO REGIME MATRIX")
 
 fig = go.Figure()
 
+# INFLACIÓN
 fig.add_trace(
     go.Bar(
-        name="Previous",
-        y=["Inflation", "Unemployment"],
-        x=[3.72, 4.10],
-        orientation="h"
+        name="Anterior",
+        y=["Inflación", "Desempleo", "JOLTS"],
+        x=[3.72, 4.10, 7182],
+        orientation="h",
+        marker_color="#6B5A20"
     )
 )
 
 fig.add_trace(
     go.Bar(
-        name="Target",
-        y=["Inflation", "Unemployment"],
-        x=[2.00, 3.50],
-        orientation="h"
+        name="Objetivo",
+        y=["Inflación", "Desempleo", "JOLTS"],
+        x=[2.00, 3.50, 0],
+        orientation="h",
+        marker_color="#D4AF37"
     )
 )
 
 fig.add_trace(
     go.Bar(
-        name="Current",
-        y=["Inflation", "Unemployment"],
-        x=[3.70, 4.10],
-        orientation="h"
+        name="Actual",
+        y=["Inflación", "Desempleo", "JOLTS"],
+        x=[3.70, 4.10, 7271],
+        orientation="h",
+        marker_color="#F5D76E"
     )
 )
 
 fig.update_layout(
     barmode="group",
-    height=300,
+    height=350,
     paper_bgcolor="#050505",
     plot_bgcolor="#050505",
-    font=dict(color="#CCCCCC")
+    font=dict(color="#CCCCCC"),
+    xaxis=dict(
+        showgrid=False
+    ),
+    yaxis=dict(
+        showgrid=False
+    ),
+    legend=dict(
+        orientation="h",
+        yanchor="bottom",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ),
+    margin=dict(
+        l=20,
+        r=20,
+        t=60,
+        b=20
+    )
 )
 
 st.plotly_chart(fig, use_container_width=True)
+
+# VALORES DE REFERENCIA
+st.markdown(
+    """
+    **Inflación:** Anterior 3.72% · Objetivo 2.00% · Actual 3.70%  
+    **Desempleo:** Anterior 4.10% · Objetivo 3.50% · Actual 4.10%  
+    **JOLTS:** Anterior 7,182 · Actual 7,271
+    """
+)
 
 # DIRECCIÓN GENERAL
 st.subheader("GENERAL MARKET DIRECTION")
