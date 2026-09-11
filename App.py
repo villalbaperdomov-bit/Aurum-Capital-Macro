@@ -225,56 +225,10 @@ st.markdown(
 # DIRECCIÓN GENERAL
 st.subheader("GENERAL MARKET DIRECTION")
 
-st.markdown(
-    """
-    <div style="
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:8px;
-        margin-top:10px;
-        margin-bottom:20px;
-    ">
-        <div style="
-            width:30%;
-            padding:18px;
-            text-align:center;
-            border:1px solid #332A10;
-            color:#555555;
-            background:#090909;
-            border-radius:6px;
-            font-weight:bold;
-        ">
-            VENTA
-        </div>
+direction_html = """<div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;margin-bottom:20px;">
+<div style="width:30%;padding:18px;text-align:center;border:1px solid #332A10;color:#555555;background:#090909;border-radius:6px;font-weight:bold;">VENTA</div>
+<div style="width:30%;padding:18px;text-align:center;border:1px solid #D4AF37;color:#D4AF37;background:#171306;border-radius:6px;font-weight:bold;box-shadow:0 0 15px rgba(212,175,55,0.15);">BAJISTA</div>
+<div style="width:30%;padding:18px;text-align:center;border:1px solid #332A10;color:#555555;background:#090909;border-radius:6px;font-weight:bold;">COMPRA</div>
+</div>"""
 
-        <div style="
-            width:30%;
-            padding:18px;
-            text-align:center;
-            border:1px solid #D4AF37;
-            color:#D4AF37;
-            background:#171306;
-            border-radius:6px;
-            font-weight:bold;
-            box-shadow:0 0 15px rgba(212,175,55,0.15);
-        ">
-            BAJISTA
-        </div>
-
-        <div style="
-            width:30%;
-            padding:18px;
-            text-align:center;
-            border:1px solid #332A10;
-            color:#555555;
-            background:#090909;
-            border-radius:6px;
-            font-weight:bold;
-        ">
-            COMPRA
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+st.markdown(direction_html, unsafe_allow_html=True)
