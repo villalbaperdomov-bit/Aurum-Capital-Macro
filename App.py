@@ -280,3 +280,8 @@ for col, asset in zip(cols, assets):
 </div>
 </div>"""
         st.markdown(asset_html, unsafe_allow_html=True)
+
+# JUSTIFICACIÓN TÉCNICA
+st.subheader("TECHNICAL JUSTIFICATION")
+
+st.info(current["justificacion_tecnica"])
