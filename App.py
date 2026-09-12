@@ -121,14 +121,21 @@ with left:
 
     fig = go.Figure()
 
-    fig.add_trace(
+   fig.add_trace(
     go.Scatter(
         x=["Anterior", "Actual"],
         y=[
             float(current["pce_anterior"]),
             pce_actual
         ],
-        mode="lines+markers",
+        mode="lines+markers+text",
+        text=[
+            f"{float(current['pce_anterior']):.2f}%",
+            f"{pce_actual:.2f}%"
+        ],
+        textposition="top center",
+        marker=dict(size=9),
+        line=dict(width=3),
         name="PCE"
     )
 )
@@ -140,13 +147,20 @@ with left:
 )
 
     fig.update_layout(
-        height=350,
-        paper_bgcolor="#050505",
-        plot_bgcolor="#050505",
-        font=dict(color="#CCCCCC")
-    )
-
-    st.plotly_chart(fig, use_container_width=True)
+    height=350,
+    paper_bgcolor="#050505",
+    plot_bgcolor="#050505",
+    font=dict(color="#CCCCCC"),
+    yaxis=dict(
+        range=[1.8, 4.2],
+        title="PCE (%)",
+        gridcolor="#292929"
+    ),
+    xaxis=dict(
+        gridcolor="#171717"
+    ),
+    showlegend=False
+)
 
 with right:
     st.subheader("MERCADO LABORAL — DESEMPLEO")
