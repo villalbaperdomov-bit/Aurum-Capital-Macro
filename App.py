@@ -208,19 +208,28 @@ def macro_row(nombre, anterior, objetivo, actual, unidad):
 </div>"""
 
 
-st.markdown(
-    macro_row("INFLACIÓN — PCE", 3.72, 2.00, 3.70, "%"),
-    unsafe_allow_html=True
+macro_row(
+    "INFLACIÓN — PCE",
+    float(current["pce_anterior"]),
+    float(str(current["pce_meta"]).replace("%", "")),
+    pce_actual,
+    "%"
 )
 
-st.markdown(
-    macro_row("DESEMPLEO", 4.10, 3.50, 4.10, "%"),
-    unsafe_allow_html=True
+macro_row(
+    "DESEMPLEO",
+    float(current["desempleo_anterior"]),
+    float(str(current["desempleo_objetivo"]).replace("%", "")),
+    desempleo_actual,
+    "%"
 )
 
-st.markdown(
-    macro_row("JOLTS", 7182, None, 7271, ""),
-    unsafe_allow_html=True
+macro_row(
+    "JOLTS",
+    int(current["jolts_anterior"]),
+    None,
+    jolts_actual,
+    ""
 )
 
 st.markdown(
