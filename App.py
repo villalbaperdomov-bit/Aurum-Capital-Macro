@@ -17,8 +17,7 @@ pce_actual = float(current["pce_actual"])
 desempleo_actual = float(current["desempleo_actual"])
 jolts_actual = int(current["jolts_actual"])
 direccion_general = str(current["direccion_general"])
-st.write("DATOS RECIBIDOS DESDE N8N / GOOGLE SHEETS")
-st.dataframe(macro_data, use_container_width=True)
+
 
 import plotly.graph_objects as go
 
