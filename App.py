@@ -5,7 +5,7 @@ CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4iwwc3_e5rGouLoaaM_
 macro_data = pd.read_csv(CSV_URL)
 
 st.write("DATOS RECIBIDOS DESDE N8N / GOOGLE SHEETS")
-st.dataframe(macro_data)
+st.dataframe(macro_data, use_container_width=True)
 
 import plotly.graph_objects as go
 
