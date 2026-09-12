@@ -6,8 +6,12 @@ macro_data = pd.read_csv(CSV_URL)
 
 macro_data.columns = macro_data.columns.str.strip()
 
-st.write("COLUMNAS RECIBIDAS:")
-st.write(macro_data.columns.tolist())
+current = macro_data.iloc[0]
+
+pce_actual = float(current["pce_actual"])
+desempleo_actual = float(current["desempleo_actual"])
+jolts_actual = int(current["jolts_actual"])
+direccion_general = str(current["direccion_general"])
 
 pce_actual = float(current["pce_actual"])
 desempleo_actual = float(current["desempleo_actual"])
