@@ -134,10 +134,10 @@ with left:
 )
 
     fig.add_hline(
-        y=2.0,
-        line_dash="dash",
-        annotation_text="TARGET 2%"
-    )
+    y=float(str(current["pce_meta"]).replace("%", "")),
+    line_dash="dash",
+    annotation_text=f"TARGET {current['pce_meta']}"
+)
 
     fig.update_layout(
         height=350,
