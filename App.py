@@ -4,7 +4,10 @@ CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4iwwc3_e5rGouLoaaM_
 
 macro_data = pd.read_csv(CSV_URL)
 
-current = macro_data.iloc[0]
+macro_data.columns = macro_data.columns.str.strip()
+
+st.write("COLUMNAS RECIBIDAS:")
+st.write(macro_data.columns.tolist())
 
 pce_actual = float(current["pce_actual"])
 desempleo_actual = float(current["desempleo_actual"])
