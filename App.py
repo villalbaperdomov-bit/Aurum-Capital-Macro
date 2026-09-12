@@ -122,13 +122,16 @@ with left:
     fig = go.Figure()
 
     fig.add_trace(
-        go.Scatter(
-            x=["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
-            y=[3.80, 3.75, 3.82, 3.78, 3.72, 3.70],
-            mode="lines+markers",
-            name="PCE"
-        )
+    go.Scatter(
+        x=["Anterior", "Actual"],
+        y=[
+            float(current["pce_anterior"]),
+            pce_actual
+        ],
+        mode="lines+markers",
+        name="PCE"
     )
+)
 
     fig.add_hline(
         y=2.0,
