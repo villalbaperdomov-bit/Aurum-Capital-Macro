@@ -1,5 +1,10 @@
 import streamlit as st
 import pandas as pd
+CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4iwwc3_e5rGouLoaaM_Ft2H7xPsoZg_HfWy65JkC3EwUWm-QgQ9j2dQLwYXtIJ5uaGJskGzVNN14N/pubhtml?gid=1273191418&single=true"
+
+macro_data = pd.read_csv(CSV_URL)
+
+st.write(macro_data)
 import plotly.graph_objects as go
 
 st.set_page_config(
