@@ -346,163 +346,92 @@ st.subheader("MACRO REGIME MATRIX")
 
 def macro_status(anterior, actual):
     if actual > anterior:
-        return "SUBIENDO", "#2ECC71"
+        return "SUBIENDO", "🟢"
     elif actual < anterior:
-        return "BAJANDO", "#E05A5A"
+        return "BAJANDO", "🔴"
     else:
-        return "ESTABLE", "#A7ADB7"
+        return "ESTABLE", "⚪"
 
 
-def macro_row(nombre, anterior, objetivo, actual, unidad, decimales=2):
-    estado, estado_color = macro_status(anterior, actual)
-
-    valores = [anterior, actual]
-
-    if objetivo is not None:
-        valores.append(objetivo)
-
-    maximo = max(valores) * 1.25 if max(valores) > 0 else 1
-
-    anterior_pct = anterior / maximo * 100
-    actual_pct = actual / maximo * 100
-
-    if objetivo is not None:
-        objetivo_pct = objetivo / maximo * 100
-
-        objetivo_html = (
-            f'<div style="position:absolute;'
-            f'left:{objetivo_pct}%;top:0;bottom:0;'
-            f'width:2px;background:#42D9FF;'
-            f'box-shadow:0 0 6px rgba(66,217,255,0.45);"></div>'
-        )
-
-        objetivo_texto = (
-            f'<span style="color:#42D9FF;">'
-            f'OBJETIVO: {objetivo:,.2f}{unidad}'
-            f'</span>'
-        )
-    else:
-        objetivo_html = ""
-        objetivo_texto = (
-            '<span style="color:#666C75;">SIN OBJETIVO</span>'
-        )
+def mostrar_macro(nombre, anterior, actual, objetivo=None, unidad="%", decimales=2):
+    estado, indicador = macro_status(anterior, actual)
 
     if decimales == 0:
-        formato_anterior = f"{anterior:,.0f}{unidad}"
-        formato_actual = f"{actual:,.0f}{unidad}"
+        anterior_txt = f"{anterior:,.0f}{unidad}"
+        actual_txt = f"{actual:,.0f}{unidad}"
+        objetivo_txt = (
+            f"{objetivo:,.0f}{unidad}"
+            if objetivo is not None
+            else "SIN OBJETIVO"
+        )
     else:
-        formato_anterior = f"{anterior:,.{decimales}f}{unidad}"
-        formato_actual = f"{actual:,.{decimales}f}{unidad}"
+        anterior_txt = f"{anterior:,.{decimales}f}{unidad}"
+        actual_txt = f"{actual:,.{decimales}f}{unidad}"
+        objetivo_txt = (
+            f"{objetivo:,.{decimales}f}{unidad}"
+            if objetivo is not None
+            else "SIN OBJETIVO"
+        )
 
-    html = (
-        f'<div style="'
-        f'margin-bottom:20px;'
-        f'padding:16px;'
-        f'background:#080808;'
-        f'border:1px solid #27241B;'
-        f'border-radius:9px;">'
+    col1, col2, col3, col4 = st.columns([2.4, 1.2, 1.2, 1.4])
 
-        f'<div style="'
-        f'display:flex;'
-        f'justify-content:space-between;'
-        f'align-items:center;'
-        f'margin-bottom:11px;">'
+    with col1:
+        st.markdown(f"**{nombre}**")
 
-        f'<span style="'
-        f'color:#D4AF37;'
-        f'font-size:13px;'
-        f'font-weight:bold;'
-        f'letter-spacing:1px;">'
-        f'{nombre}'
-        f'</span>'
+    with col2:
+        st.caption("ANTERIOR")
+        st.markdown(f"### {anterior_txt}")
 
-        f'<span style="'
-        f'font-size:10px;'
-        f'font-weight:bold;'
-        f'letter-spacing:1px;'
-        f'color:{estado_color};'
-        f'border:1px solid {estado_color};'
-        f'border-radius:12px;'
-        f'padding:4px 9px;">'
-        f'{estado}'
-        f'</span>'
+    with col3:
+        st.caption("ACTUAL")
+        st.markdown(f"### {actual_txt}")
 
-        f'</div>'
+    with col4:
+        st.caption("ESTADO")
+        st.markdown(f"### {indicador} {estado}")
 
-        f'<div style="'
-        f'display:flex;'
-        f'justify-content:space-between;'
-        f'align-items:center;'
-        f'margin-bottom:9px;'
-        f'font-size:11px;">'
+    if objetivo is not None:
+        st.caption(f"OBJETIVO: {objetivo_txt}")
+    else:
+        st.caption("SIN OBJETIVO")
 
-        f'<span style="color:#777D86;">'
-        f'ANTERIOR '
-        f'<span style="color:#9B9FA7;font-weight:bold;">'
-        f'{formato_anterior}'
-        f'</span>'
-        f'</span>'
-
-        f'<span style="color:#D4AF37;font-weight:bold;">'
-        f'ACTUAL {formato_actual}'
-        f'</span>'
-
-        f'</div>'
-
-        f'<div style="'
-        f'position:relative;'
-        f'height:34px;'
-        f'background:#101010;'
-        f'border:1px solid #292A2E;'
-        f'border-radius:5px;'
-        f'overflow:hidden;">'
-
-        f'{objetivo_html}'
-
-        f'<div style="'
-        f'position:absolute;'
-        f'left:0;'
-        f'top:6px;'
-        f'height:20px;'
-        f'width:{anterior_pct}%;'
-        f'background:#5C6068;'
-        f'opacity:0.85;">'
-        f'</div>'
-
-        f'<div style="'
-        f'position:absolute;'
-        f'left:0;'
-        f'top:11px;'
-        f'height:10px;'
-        f'width:{actual_pct}%;'
-        f'background:#D4AF37;'
-        f'box-shadow:0 0 8px rgba(212,175,55,0.22);">'
-        f'</div>'
-
-        f'</div>'
-
-        f'<div style="'
-        f'display:flex;'
-        f'justify-content:space-between;'
-        f'margin-top:7px;'
-        f'font-size:10px;">'
-
-        f'<span style="color:#626873;">ANTERIOR</span>'
-
-        f'<span>{objetivo_texto}</span>'
-
-        f'<span style="color:#D4AF37;">ACTUAL</span>'
-
-        f'</div>'
-
-        f'</div>'
-    )
-
-    return html
+    st.divider()
 
 
-st.markdown(
-    macro_row(
+mostrar_macro(
+    "INFLACIÓN — PCE",
+    float(current["pce_anterior"]),
+    pce_actual,
+    float(str(current["pce_meta"]).replace("%", "")),
+    "%",
+    2
+)
+
+
+mostrar_macro(
+    "DESEMPLEO",
+    float(current["desempleo_anterior"]),
+    desempleo_actual,
+    float(str(current["desempleo_objetivo"]).replace("%", "")),
+    "%",
+    2
+)
+
+
+mostrar_macro(
+    "JOLTS",
+    int(current["jolts_anterior"]),
+    jolts_actual,
+    None,
+    "",
+    0
+)
+
+
+st.caption(
+    "🟢 SUBIENDO    🔴 BAJANDO    ⚪ ESTABLE    |    "
+    "ACTUAL = dorado    |    OBJETIVO = referencia"
+)
     
 
 # DIRECCIÓN GENERAL
