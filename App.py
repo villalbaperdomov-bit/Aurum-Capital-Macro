@@ -173,22 +173,24 @@ left, right = st.columns(2)
 with left:
     st.subheader("INFLACIÓN — PCE")
 
-    history_data["fecha_procesamiento"] = pd.to_datetime(
-        history_data["fecha_procesamiento"]
-    )
+    pce_history = history_data.dropna(
+        subset=["pce_actual"]
+    ).copy()
 
-    history_data = history_data.sort_values("fecha_procesamiento")
+    pce_history = pce_history.sort_values(
+        "fecha_procesamiento"
+    )
 
     fig = go.Figure()
 
     fig.add_trace(
         go.Scatter(
-            x=history_data["fecha_procesamiento"],
-            y=history_data["pce_actual"],
+            x=pce_history["fecha_procesamiento"],
+            y=pce_history["pce_actual"],
             mode="lines+markers+text",
             text=[
                 f"{valor:.2f}%"
-                for valor in history_data["pce_actual"]
+                for valor in pce_history["pce_actual"]
             ],
             textposition="top center",
             marker=dict(size=9),
@@ -198,7 +200,9 @@ with left:
     )
 
     fig.add_hline(
-        y=float(str(current["pce_meta"]).replace("%", "")),
+        y=float(
+            str(current["pce_meta"]).replace("%", "")
+        ),
         line_dash="dash",
         line_width=2,
         annotation_text=f"TARGET {current['pce_meta']}",
@@ -216,12 +220,16 @@ with left:
         ),
         xaxis=dict(
             title="Fecha",
-            gridcolor="#171717"
+            gridcolor="#171717",
+            tickformat="%b %Y"
         ),
         showlegend=False
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
 
 with right:
     st.subheader("MERCADO LABORAL — DESEMPLEO")
