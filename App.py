@@ -122,19 +122,22 @@ left, right = st.columns(2)
 with left:
     st.subheader("INFLACIÓN — PCE")
 
+    history_data["fecha_procesamiento"] = pd.to_datetime(
+        history_data["fecha_procesamiento"]
+    )
+
+    history_data = history_data.sort_values("fecha_procesamiento")
+
     fig = go.Figure()
 
     fig.add_trace(
         go.Scatter(
-            x=["Anterior", "Actual"],
-            y=[
-                float(current["pce_anterior"]),
-                pce_actual
-            ],
+            x=history_data["fecha_procesamiento"],
+            y=history_data["pce_actual"],
             mode="lines+markers+text",
             text=[
-                f"{float(current['pce_anterior']):.2f}%",
-                f"{pce_actual:.2f}%"
+                f"{valor:.2f}%"
+                for valor in history_data["pce_actual"]
             ],
             textposition="top center",
             marker=dict(size=9),
@@ -146,7 +149,9 @@ with left:
     fig.add_hline(
         y=float(str(current["pce_meta"]).replace("%", "")),
         line_dash="dash",
-        annotation_text=f"TARGET {current['pce_meta']}"
+        line_width=2,
+        annotation_text=f"TARGET {current['pce_meta']}",
+        annotation_position="bottom right"
     )
 
     fig.update_layout(
@@ -155,11 +160,11 @@ with left:
         plot_bgcolor="#050505",
         font=dict(color="#CCCCCC"),
         yaxis=dict(
-            range=[1.8, 4.2],
             title="PCE (%)",
             gridcolor="#292929"
         ),
         xaxis=dict(
+            title="Fecha",
             gridcolor="#171717"
         ),
         showlegend=False
