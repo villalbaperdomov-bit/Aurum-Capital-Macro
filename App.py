@@ -503,7 +503,7 @@ def macro_row(nombre, anterior, objetivo, actual, unidad, decimales=2):
 
 st.markdown(
     macro_row(
-        "INFLACIÓ
+    
 
 # DIRECCIÓN GENERAL
 st.subheader("GENERAL MARKET DIRECTION")
