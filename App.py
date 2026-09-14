@@ -6,6 +6,25 @@ HISTORY_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4iwwc3_e5rG
 macro_data = pd.read_csv(CSV_URL)
 history_data = pd.read_csv(HISTORY_CSV_URL)
 history_data.columns = history_data.columns.str.strip()
+history_data["fecha_procesamiento"] = pd.to_datetime(
+    history_data["fecha_procesamiento"],
+    errors="coerce"
+)
+
+def first_valid(series):
+    values = series.dropna()
+    return values.iloc[0] if not values.empty else None
+
+history_data = (
+    history_data
+    .groupby("fecha_procesamiento", as_index=False)
+    .agg({
+        "pce_actual": first_valid,
+        "desempleo_actual": first_valid,
+        "jolts_actual": first_valid
+    })
+    .sort_values("fecha_procesamiento")
+)
 
 macro_data.columns = macro_data.columns.str.strip()
 
