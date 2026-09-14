@@ -271,7 +271,67 @@ with right:
     st.plotly_chart(fig, use_container_width=True)
 
 st.divider()
+# JOLTS — HISTÓRICO
+st.subheader("OFERTAS DE EMPLEO — JOLTS")
 
+jolts_history = history_data.dropna(
+    subset=["jolts_actual"]
+).copy()
+
+jolts_history["jolts_actual"] = pd.to_numeric(
+    jolts_history["jolts_actual"],
+    errors="coerce"
+)
+
+jolts_history = jolts_history.dropna(
+    subset=["jolts_actual"]
+).sort_values("fecha_procesamiento")
+
+fig_jolts = go.Figure()
+
+fig_jolts.add_trace(
+    go.Bar(
+        x=jolts_history["fecha_procesamiento"],
+        y=jolts_history["jolts_actual"],
+        text=[
+            f"{valor:,.0f}"
+            for valor in jolts_history["jolts_actual"]
+        ],
+        textposition="outside",
+        name="JOLTS"
+    )
+)
+
+fig_jolts.update_layout(
+    height=360,
+    paper_bgcolor="#050505",
+    plot_bgcolor="#050505",
+    font=dict(color="#CCCCCC"),
+    yaxis=dict(
+        title="Ofertas de empleo",
+        gridcolor="#292929",
+        tickformat=","
+    ),
+    xaxis=dict(
+        title="Fecha",
+        gridcolor="#171717",
+        tickformat="%b %Y"
+    ),
+    showlegend=False,
+    margin=dict(
+        l=60,
+        r=30,
+        t=30,
+        b=60
+    )
+)
+
+st.plotly_chart(
+    fig_jolts,
+    use_container_width=True
+)
+
+st.divider()
 # MATRIZ MACRO
 st.subheader("MACRO REGIME MATRIX")
 
