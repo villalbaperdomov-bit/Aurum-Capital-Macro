@@ -5,43 +5,57 @@ HISTORY_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4iwwc3_e5rG
 
 macro_data = pd.read_csv(CSV_URL)
 history_data = pd.read_csv(HISTORY_CSV_URL)
+
 history_data.columns = history_data.columns.str.strip()
-history_data = history_data[
-    history_data["release_signature"].isna()
-].copy()
+
+# Mantener solamente los registros históricos.
+# La fila actual de Hoja 2 tiene release_signature y no debe
+# formar parte de las series históricas.
+if "release_signature" in history_data.columns:
+    history_data = history_data[
+        history_data["release_signature"].isna()
+    ].copy()
+
+# Convertir fechas de forma robusta.
 history_data["fecha_procesamiento"] = pd.to_datetime(
-    history_data["fecha_procesamiento"],
+    history_data["fecha_procesamiento"].astype(str),
+    format="mixed",
     errors="coerce"
 )
 
-def first_valid(series):
-    values = series.dropna()
-    return values.iloc[0] if not values.empty else None
-
-history_data = (
-    history_data
-    .groupby("fecha_procesamiento", as_index=False)
-    .agg({
-        "pce_actual": first_valid,
-        "desempleo_actual": first_valid,
-        "jolts_actual": first_valid
-    })
-    .sort_values("fecha_procesamiento")
-)
-
+# Convertir números que pueden venir como "2,88" desde Google Sheets.
 history_data["pce_actual"] = pd.to_numeric(
-    history_data["pce_actual"],
+    history_data["pce_actual"]
+    .astype(str)
+    .str.replace(",", ".", regex=False),
     errors="coerce"
 )
 
 history_data["desempleo_actual"] = pd.to_numeric(
-    history_data["desempleo_actual"],
+    history_data["desempleo_actual"]
+    .astype(str)
+    .str.replace(",", ".", regex=False),
     errors="coerce"
 )
 
 history_data["jolts_actual"] = pd.to_numeric(
-    history_data["jolts_actual"],
+    history_data["jolts_actual"]
+    .astype(str)
+    .str.replace(",", "", regex=False),
     errors="coerce"
+)
+
+# Una sola fila por fecha, combinando PCE + desempleo + JOLTS.
+history_data = (
+    history_data
+    .groupby("fecha_procesamiento", as_index=False)
+    .agg({
+        "pce_actual": "first",
+        "desempleo_actual": "first",
+        "jolts_actual": "first"
+    })
+    .sort_values("fecha_procesamiento")
+    .reset_index(drop=True)
 )
 
 macro_data.columns = macro_data.columns.str.strip()
