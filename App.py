@@ -344,7 +344,18 @@ st.divider()
 st.subheader("MACRO REGIME MATRIX")
 
 
-def macro_row(nombre, anterior, objetivo, actual, unidad):
+def macro_status(anterior, actual):
+    if actual > anterior:
+        return "SUBIENDO", "#2ECC71"
+    elif actual < anterior:
+        return "BAJANDO", "#E05A5A"
+    else:
+        return "ESTABLE", "#A7ADB7"
+
+
+def macro_row(nombre, anterior, objetivo, actual, unidad, decimales=2):
+    estado, estado_color = macro_status(anterior, actual)
+
     valores = [anterior, actual]
 
     if objetivo is not None:
@@ -357,66 +368,133 @@ def macro_row(nombre, anterior, objetivo, actual, unidad):
 
     if objetivo is not None:
         objetivo_pct = objetivo / maximo * 100
+
         objetivo_html = (
-            f'<div style="position:absolute;left:{objetivo_pct}%;'
-            f'top:0;bottom:0;width:2px;background:#FFFFFF;"></div>'
+            f'<div style="position:absolute;'
+            f'left:{objetivo_pct}%;top:0;bottom:0;'
+            f'width:2px;background:#42D9FF;'
+            f'box-shadow:0 0 6px rgba(66,217,255,0.45);"></div>'
         )
-        objetivo_texto = f"OBJETIVO: {objetivo:,.2f}{unidad}"
+
+        objetivo_texto = (
+            f'<span style="color:#42D9FF;">'
+            f'OBJETIVO: {objetivo:,.2f}{unidad}'
+            f'</span>'
+        )
     else:
         objetivo_html = ""
-        objetivo_texto = "SIN OBJETIVO"
+        objetivo_texto = (
+            '<span style="color:#666C75;">SIN OBJETIVO</span>'
+        )
+
+    if decimales == 0:
+        formato_anterior = f"{anterior:,.0f}{unidad}"
+        formato_actual = f"{actual:,.0f}{unidad}"
+    else:
+        formato_anterior = f"{anterior:,.{decimales}f}{unidad}"
+        formato_actual = f"{actual:,.{decimales}f}{unidad}"
 
     html = (
-        f'<div style="margin-bottom:24px;padding:14px 16px;'
-        f'background:#080808;border:1px solid #2A2515;'
-        f'border-radius:8px;">'
+        f'<div style="'
+        f'margin-bottom:20px;'
+        f'padding:16px;'
+        f'background:#080808;'
+        f'border:1px solid #27241B;'
+        f'border-radius:9px;">'
 
-        f'<div style="display:flex;justify-content:space-between;'
-        f'align-items:center;margin-bottom:10px;'
-        f'color:#D4AF37;font-size:13px;font-weight:bold;'
+        f'<div style="'
+        f'display:flex;'
+        f'justify-content:space-between;'
+        f'align-items:center;'
+        f'margin-bottom:11px;">'
+
+        f'<span style="'
+        f'color:#D4AF37;'
+        f'font-size:13px;'
+        f'font-weight:bold;'
         f'letter-spacing:1px;">'
+        f'{nombre}'
+        f'</span>'
 
-        f'<span>{nombre}</span>'
+        f'<span style="'
+        f'font-size:10px;'
+        f'font-weight:bold;'
+        f'letter-spacing:1px;'
+        f'color:{estado_color};'
+        f'border:1px solid {estado_color};'
+        f'border-radius:12px;'
+        f'padding:4px 9px;">'
+        f'{estado}'
+        f'</span>'
 
-        f'<span style="color:#B7B7B7;font-size:11px;'
-        f'font-weight:normal;letter-spacing:0;">'
+        f'</div>'
 
-        f'ANTERIOR: '
-        f'<span style="color:#C7A95A;font-weight:bold;">'
-        f'{anterior:,.2f}{unidad}</span>'
+        f'<div style="'
+        f'display:flex;'
+        f'justify-content:space-between;'
+        f'align-items:center;'
+        f'margin-bottom:9px;'
+        f'font-size:11px;">'
 
-        f'&nbsp;&nbsp;|&nbsp;&nbsp;'
+        f'<span style="color:#777D86;">'
+        f'ANTERIOR '
+        f'<span style="color:#9B9FA7;font-weight:bold;">'
+        f'{formato_anterior}'
+        f'</span>'
+        f'</span>'
 
-        f'ACTUAL: '
         f'<span style="color:#D4AF37;font-weight:bold;">'
-        f'{actual:,.2f}{unidad}</span>'
+        f'ACTUAL {formato_actual}'
+        f'</span>'
 
-        f'</span></div>'
+        f'</div>'
 
-        f'<div style="position:relative;height:34px;'
-        f'background:#111111;border:1px solid #302915;'
-        f'border-radius:5px;overflow:hidden;">'
+        f'<div style="'
+        f'position:relative;'
+        f'height:34px;'
+        f'background:#101010;'
+        f'border:1px solid #292A2E;'
+        f'border-radius:5px;'
+        f'overflow:hidden;">'
 
         f'{objetivo_html}'
 
-        f'<div style="position:absolute;left:0;top:6px;'
-        f'height:20px;width:{anterior_pct}%;'
-        f'background:#6B5A20;"></div>'
+        f'<div style="'
+        f'position:absolute;'
+        f'left:0;'
+        f'top:6px;'
+        f'height:20px;'
+        f'width:{anterior_pct}%;'
+        f'background:#5C6068;'
+        f'opacity:0.85;">'
+        f'</div>'
 
-        f'<div style="position:absolute;left:0;top:11px;'
-        f'height:10px;width:{actual_pct}%;'
-        f'background:#D4AF37;"></div>'
+        f'<div style="'
+        f'position:absolute;'
+        f'left:0;'
+        f'top:11px;'
+        f'height:10px;'
+        f'width:{actual_pct}%;'
+        f'background:#D4AF37;'
+        f'box-shadow:0 0 8px rgba(212,175,55,0.22);">'
+        f'</div>'
 
         f'</div>'
 
-        f'<div style="display:flex;justify-content:space-between;'
-        f'margin-top:7px;color:#777777;font-size:10px;">'
+        f'<div style="'
+        f'display:flex;'
+        f'justify-content:space-between;'
+        f'margin-top:7px;'
+        f'font-size:10px;">'
 
-        f'<span>ANTERIOR</span>'
+        f'<span style="color:#626873;">ANTERIOR</span>'
+
         f'<span>{objetivo_texto}</span>'
-        f'<span>ACTUAL</span>'
+
+        f'<span style="color:#D4AF37;">ACTUAL</span>'
 
         f'</div>'
+
         f'</div>'
     )
 
@@ -425,52 +503,7 @@ def macro_row(nombre, anterior, objetivo, actual, unidad):
 
 st.markdown(
     macro_row(
-        "INFLACIÓN — PCE",
-        float(current["pce_anterior"]),
-        float(str(current["pce_meta"]).replace("%", "")),
-        pce_actual,
-        "%"
-    ),
-    unsafe_allow_html=True
-)
-
-
-st.markdown(
-    macro_row(
-        "DESEMPLEO",
-        float(current["desempleo_anterior"]),
-        float(str(current["desempleo_objetivo"]).replace("%", "")),
-        desempleo_actual,
-        "%"
-    ),
-    unsafe_allow_html=True
-)
-
-
-st.markdown(
-    macro_row(
-        "JOLTS",
-        int(current["jolts_anterior"]),
-        None,
-        jolts_actual,
-        ""
-    ),
-    unsafe_allow_html=True
-)
-
-
-st.markdown(
-    '<div style="margin-top:10px;padding:12px 14px;'
-    'border-top:1px solid #29251A;color:#888888;'
-    'font-size:10px;letter-spacing:0.5px;">'
-    '<span style="color:#6B5A20;">■</span> ANTERIOR'
-    '&nbsp;&nbsp;&nbsp;&nbsp;'
-    '<span style="color:#D4AF37;">■</span> ACTUAL'
-    '&nbsp;&nbsp;&nbsp;&nbsp;'
-    '<span style="color:#FFFFFF;">│</span> OBJETIVO'
-    '</div>',
-    unsafe_allow_html=True
-)
+        "INFLACIÓN
 
 # DIRECCIÓN GENERAL
 st.subheader("GENERAL MARKET DIRECTION")
