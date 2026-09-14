@@ -1,8 +1,11 @@
 import streamlit as st
 import pandas as pd
 CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4iwwc3_e5rGouLoaaM_Ft2H7xPsoZg_HfWy65JkC3EwUWm-QgQ9j2dQLwYXtIJ5uaGJskGzVNN14N/pub?gid=1273191418&single=true&output=csv"
+HISTORY_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4iwwc3_e5rGouLoaaM_Ft2H7xPsoZg_HfWy65JkC3EwUWm-QgQ9j2dQLwYXtIJ5uaGJskGzVNN14N/pub?gid=1954464051&single=true&output=csv"
 
 macro_data = pd.read_csv(CSV_URL)
+history_data = pd.read_csv(HISTORY_CSV_URL)
+history_data.columns = history_data.columns.str.strip()
 
 macro_data.columns = macro_data.columns.str.strip()
 
