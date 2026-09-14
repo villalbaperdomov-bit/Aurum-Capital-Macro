@@ -343,77 +343,178 @@ st.divider()
 # MATRIZ MACRO
 st.subheader("MACRO REGIME MATRIX")
 
+
 def macro_row(nombre, anterior, objetivo, actual, unidad):
-    maximo = max(anterior, actual, objetivo if objetivo else 0) * 1.25
+    valores = [anterior, actual]
+
+    if objetivo is not None:
+        valores.append(objetivo)
+
+    maximo = max(valores) * 1.25 if max(valores) > 0 else 1
+
     anterior_pct = anterior / maximo * 100
     actual_pct = actual / maximo * 100
 
     if objetivo is not None:
         objetivo_pct = objetivo / maximo * 100
-        objetivo_html = f'<div style="position:absolute;left:{objetivo_pct}%;top:0;bottom:0;width:2px;background:#FFFFFF;"></div>'
+        objetivo_html = (
+            f'<div style="'
+            f'position:absolute;'
+            f'left:{objetivo_pct}%;'
+            f'top:0;'
+            f'bottom:0;'
+            f'width:2px;'
+            f'background:#FFFFFF;'
+            f'"></div>'
+        )
     else:
         objetivo_html = ""
 
-    return f"""<div style="margin-bottom:28px;">
-<div style="display:flex;justify-content:space-between;margin-bottom:7px;color:#D4AF37;font-size:13px;font-weight:bold;">
-<span>{nombre}</span>
-<span>ANTERIOR: {anterior:,.2f}{unidad} &nbsp;&nbsp;|&nbsp;&nbsp; ACTUAL: {actual:,.2f}{unidad}</span>
-</div>
-<div style="position:relative;height:30px;background:#111111;border:1px solid #3A3218;border-radius:4px;">
-{objetivo_html}
-<div style="position:absolute;left:0;top:6px;height:18px;width:{anterior_pct}%;background:#6B5A20;"></div>
-<div style="position:absolute;left:0;top:10px;height:10px;width:{actual_pct}%;background:#D4AF37;"></div>
-</div>
-<div style="display:flex;justify-content:space-between;margin-top:6px;color:#777777;font-size:10px;">
-<span>ANTERIOR</span>
-<span>{"OBJETIVO: " + f"{objetivo:,.2f}{unidad}" if objetivo is not None else "SIN OBJETIVO"}</span>
-<span>ACTUAL</span>
-</div>
-</div>"""
+    return f"""
+    <div style="
+        margin-bottom:26px;
+        padding:14px 16px;
+        background:#080808;
+        border:1px solid #2A2515;
+        border-radius:8px;
+    ">
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:10px;
+            color:#D4AF37;
+            font-size:13px;
+            font-weight:bold;
+            letter-spacing:1px;
+        ">
+            <span>{nombre}</span>
+
+            <span style="
+                color:#B7B7B7;
+                font-size:11px;
+                font-weight:normal;
+                letter-spacing:0;
+            ">
+                ANTERIOR:
+                <span style="color:#C7A95A;font-weight:bold;">
+                    {anterior:,.2f}{unidad}
+                </span>
+
+                &nbsp;&nbsp;|&nbsp;&nbsp;
+
+                ACTUAL:
+                <span style="color:#D4AF37;font-weight:bold;">
+                    {actual:,.2f}{unidad}
+                </span>
+            </span>
+        </div>
+
+        <div style="
+            position:relative;
+            height:34px;
+            background:#111111;
+            border:1px solid #302915;
+            border-radius:5px;
+            overflow:hidden;
+        ">
+
+            {objetivo_html}
+
+            <div style="
+                position:absolute;
+                left:0;
+                top:6px;
+                height:20px;
+                width:{anterior_pct}%;
+                background:#6B5A20;
+            "></div>
+
+            <div style="
+                position:absolute;
+                left:0;
+                top:11px;
+                height:10px;
+                width:{actual_pct}%;
+                background:#D4AF37;
+                box-shadow:0 0 8px rgba(212,175,55,0.18);
+            "></div>
+
+        </div>
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            margin-top:7px;
+            color:#777777;
+            font-size:10px;
+        ">
+            <span>ANTERIOR</span>
+
+            <span>
+                {
+                    "OBJETIVO: " + f"{objetivo:,.2f}{unidad}"
+                    if objetivo is not None
+                    else "SIN OBJETIVO"
+                }
+            </span>
+
+            <span>ACTUAL</span>
+        </div>
+
+    </div>
+    """
 
 
-macro_row(
-    "INFLACIÓN — PCE",
-    float(current["pce_anterior"]),
-    float(str(current["pce_meta"]).replace("%", "")),
-    pce_actual,
-    "%"
+st.markdown(
+    macro_row(
+        "INFLACIÓN — PCE",
+        float(current["pce_anterior"]),
+        float(str(current["pce_meta"]).replace("%", "")),
+        pce_actual,
+        "%"
+    ),
+    unsafe_allow_html=True
 )
 
-macro_row(
-    "DESEMPLEO",
-    float(current["desempleo_anterior"]),
-    float(str(current["desempleo_objetivo"]).replace("%", "")),
-    desempleo_actual,
-    "%"
+
+st.markdown(
+    macro_row(
+        "DESEMPLEO",
+        float(current["desempleo_anterior"]),
+        float(str(current["desempleo_objetivo"]).replace("%", "")),
+        desempleo_actual,
+        "%"
+    ),
+    unsafe_allow_html=True
 )
 
-macro_row(
-    "JOLTS",
-    int(current["jolts_anterior"]),
-    None,
-    jolts_actual,
-    ""
+
+st.markdown(
+    macro_row(
+        "JOLTS",
+        int(current["jolts_anterior"]),
+        None,
+        jolts_actual,
+        ""
+    ),
+    unsafe_allow_html=True
 )
+
 
 st.markdown(
     """
     <div style="
-        margin-top:15px;
-        padding:12px;
+        margin-top:10px;
+        padding:12px 14px;
         border-top:1px solid #29251A;
         color:#888888;
-        font-size:11px;
+        font-size:10px;
+        letter-spacing:0.5px;
     ">
-        <span style="color:#6B5A20;">■</span> ANTERIOR
-        &nbsp;&nbsp;&nbsp;
-        <span style="color:#D4AF37;">■</span> ACTUAL
-        &nbsp;&nbsp;&nbsp;
-        <span style="color:#FFFFFF;">│</span> OBJETIVO
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+        <span style="color:#6B5A20;">■</span>
+        A
 
 # DIRECCIÓN GENERAL
 st.subheader("GENERAL MARKET DIRECTION")
