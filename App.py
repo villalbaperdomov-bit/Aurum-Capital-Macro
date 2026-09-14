@@ -170,19 +170,29 @@ with right:
     fig = go.Figure()
 
     fig.add_trace(
-        go.Scatter(
-            x=["Ene", "Feb", "Mar", "Abr", "May", "Jun"],
-            y=[3.90, 4.00, 4.00, 4.10, 4.10, 4.10],
-            mode="lines+markers",
-            name="Desempleo"
-        )
+    go.Scatter(
+        x=["Anterior", "Actual"],
+        y=[
+            float(current["desempleo_anterior"]),
+            desempleo_actual
+        ],
+        mode="lines+markers+text",
+        text=[
+            f"{float(current['desempleo_anterior']):.2f}%",
+            f"{desempleo_actual:.2f}%"
+        ],
+        textposition="top center",
+        marker=dict(size=9),
+        line=dict(width=3),
+        name="Desempleo"
     )
+)
 
     fig.add_hline(
-        y=3.5,
-        line_dash="dash",
-        annotation_text="TARGET 3.5%"
-    )
+    y=float(str(current["desempleo_objetivo"]).replace("%", "")),
+    line_dash="dash",
+    annotation_text=f"TARGET {current['desempleo_objetivo']}"
+)
 
     fig.update_layout(
         height=350,
