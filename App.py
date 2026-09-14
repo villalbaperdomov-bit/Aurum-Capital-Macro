@@ -26,6 +26,21 @@ history_data = (
     .sort_values("fecha_procesamiento")
 )
 
+history_data["pce_actual"] = pd.to_numeric(
+    history_data["pce_actual"],
+    errors="coerce"
+)
+
+history_data["desempleo_actual"] = pd.to_numeric(
+    history_data["desempleo_actual"],
+    errors="coerce"
+)
+
+history_data["jolts_actual"] = pd.to_numeric(
+    history_data["jolts_actual"],
+    errors="coerce"
+)
+
 macro_data.columns = macro_data.columns.str.strip()
 
 current = macro_data.iloc[0]
