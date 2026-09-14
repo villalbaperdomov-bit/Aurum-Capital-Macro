@@ -6,6 +6,9 @@ HISTORY_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR4iwwc3_e5rG
 macro_data = pd.read_csv(CSV_URL)
 history_data = pd.read_csv(HISTORY_CSV_URL)
 history_data.columns = history_data.columns.str.strip()
+history_data = history_data[
+    history_data["release_signature"].isna()
+].copy()
 history_data["fecha_procesamiento"] = pd.to_datetime(
     history_data["fecha_procesamiento"],
     errors="coerce"
