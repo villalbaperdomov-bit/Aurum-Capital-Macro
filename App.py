@@ -191,7 +191,9 @@ with right:
     fig.add_hline(
     y=float(str(current["desempleo_objetivo"]).replace("%", "")),
     line_dash="dash",
-    annotation_text=f"TARGET {current['desempleo_objetivo']}"
+    line_width=2,
+    annotation_text=f"TARGET {current['desempleo_objetivo']}",
+    annotation_position="bottom right"
 )
 
     fig.update_layout(
