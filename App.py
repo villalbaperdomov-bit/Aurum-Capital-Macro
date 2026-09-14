@@ -178,37 +178,43 @@ with right:
     fig = go.Figure()
 
     fig.add_trace(
-    go.Scatter(
-        x=["Anterior", "Actual"],
-        y=[
-            float(current["desempleo_anterior"]),
-            desempleo_actual
-        ],
-        mode="lines+markers+text",
-        text=[
-            f"{float(current['desempleo_anterior']):.2f}%",
-            f"{desempleo_actual:.2f}%"
-        ],
-        textposition="top center",
-        marker=dict(size=9),
-        line=dict(width=3),
-        name="Desempleo"
+        go.Scatter(
+            x=history_data["fecha_procesamiento"],
+            y=history_data["desempleo_actual"],
+            mode="lines+markers+text",
+            text=[
+                f"{valor:.2f}%"
+                for valor in history_data["desempleo_actual"]
+            ],
+            textposition="top center",
+            marker=dict(size=9),
+            line=dict(width=3),
+            name="Desempleo"
+        )
     )
-)
 
     fig.add_hline(
-    y=float(str(current["desempleo_objetivo"]).replace("%", "")),
-    line_dash="dash",
-    line_width=2,
-    annotation_text=f"TARGET {current['desempleo_objetivo']}",
-    annotation_position="bottom right"
-)
+        y=float(str(current["desempleo_objetivo"]).replace("%", "")),
+        line_dash="dash",
+        line_width=2,
+        annotation_text=f"TARGET {current['desempleo_objetivo']}",
+        annotation_position="bottom right"
+    )
 
     fig.update_layout(
         height=350,
         paper_bgcolor="#050505",
         plot_bgcolor="#050505",
-        font=dict(color="#CCCCCC")
+        font=dict(color="#CCCCCC"),
+        yaxis=dict(
+            title="Desempleo (%)",
+            gridcolor="#292929"
+        ),
+        xaxis=dict(
+            title="Fecha",
+            gridcolor="#171717"
+        ),
+        showlegend=False
     )
 
     st.plotly_chart(fig, use_container_width=True)
