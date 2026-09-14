@@ -358,113 +358,69 @@ def macro_row(nombre, anterior, objetivo, actual, unidad):
     if objetivo is not None:
         objetivo_pct = objetivo / maximo * 100
         objetivo_html = (
-            f'<div style="'
-            f'position:absolute;'
-            f'left:{objetivo_pct}%;'
-            f'top:0;'
-            f'bottom:0;'
-            f'width:2px;'
-            f'background:#FFFFFF;'
-            f'"></div>'
+            f'<div style="position:absolute;left:{objetivo_pct}%;'
+            f'top:0;bottom:0;width:2px;background:#FFFFFF;"></div>'
         )
+        objetivo_texto = f"OBJETIVO: {objetivo:,.2f}{unidad}"
     else:
         objetivo_html = ""
+        objetivo_texto = "SIN OBJETIVO"
 
-    return f"""
-    <div style="
-        margin-bottom:26px;
-        padding:14px 16px;
-        background:#080808;
-        border:1px solid #2A2515;
-        border-radius:8px;
-    ">
+    html = (
+        f'<div style="margin-bottom:24px;padding:14px 16px;'
+        f'background:#080808;border:1px solid #2A2515;'
+        f'border-radius:8px;">'
 
-        <div style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:10px;
-            color:#D4AF37;
-            font-size:13px;
-            font-weight:bold;
-            letter-spacing:1px;
-        ">
-            <span>{nombre}</span>
+        f'<div style="display:flex;justify-content:space-between;'
+        f'align-items:center;margin-bottom:10px;'
+        f'color:#D4AF37;font-size:13px;font-weight:bold;'
+        f'letter-spacing:1px;">'
 
-            <span style="
-                color:#B7B7B7;
-                font-size:11px;
-                font-weight:normal;
-                letter-spacing:0;
-            ">
-                ANTERIOR:
-                <span style="color:#C7A95A;font-weight:bold;">
-                    {anterior:,.2f}{unidad}
-                </span>
+        f'<span>{nombre}</span>'
 
-                &nbsp;&nbsp;|&nbsp;&nbsp;
+        f'<span style="color:#B7B7B7;font-size:11px;'
+        f'font-weight:normal;letter-spacing:0;">'
 
-                ACTUAL:
-                <span style="color:#D4AF37;font-weight:bold;">
-                    {actual:,.2f}{unidad}
-                </span>
-            </span>
-        </div>
+        f'ANTERIOR: '
+        f'<span style="color:#C7A95A;font-weight:bold;">'
+        f'{anterior:,.2f}{unidad}</span>'
 
-        <div style="
-            position:relative;
-            height:34px;
-            background:#111111;
-            border:1px solid #302915;
-            border-radius:5px;
-            overflow:hidden;
-        ">
+        f'&nbsp;&nbsp;|&nbsp;&nbsp;'
 
-            {objetivo_html}
+        f'ACTUAL: '
+        f'<span style="color:#D4AF37;font-weight:bold;">'
+        f'{actual:,.2f}{unidad}</span>'
 
-            <div style="
-                position:absolute;
-                left:0;
-                top:6px;
-                height:20px;
-                width:{anterior_pct}%;
-                background:#6B5A20;
-            "></div>
+        f'</span></div>'
 
-            <div style="
-                position:absolute;
-                left:0;
-                top:11px;
-                height:10px;
-                width:{actual_pct}%;
-                background:#D4AF37;
-                box-shadow:0 0 8px rgba(212,175,55,0.18);
-            "></div>
+        f'<div style="position:relative;height:34px;'
+        f'background:#111111;border:1px solid #302915;'
+        f'border-radius:5px;overflow:hidden;">'
 
-        </div>
+        f'{objetivo_html}'
 
-        <div style="
-            display:flex;
-            justify-content:space-between;
-            margin-top:7px;
-            color:#777777;
-            font-size:10px;
-        ">
-            <span>ANTERIOR</span>
+        f'<div style="position:absolute;left:0;top:6px;'
+        f'height:20px;width:{anterior_pct}%;'
+        f'background:#6B5A20;"></div>'
 
-            <span>
-                {
-                    "OBJETIVO: " + f"{objetivo:,.2f}{unidad}"
-                    if objetivo is not None
-                    else "SIN OBJETIVO"
-                }
-            </span>
+        f'<div style="position:absolute;left:0;top:11px;'
+        f'height:10px;width:{actual_pct}%;'
+        f'background:#D4AF37;"></div>'
 
-            <span>ACTUAL</span>
-        </div>
+        f'</div>'
 
-    </div>
-    """
+        f'<div style="display:flex;justify-content:space-between;'
+        f'margin-top:7px;color:#777777;font-size:10px;">'
+
+        f'<span>ANTERIOR</span>'
+        f'<span>{objetivo_texto}</span>'
+        f'<span>ACTUAL</span>'
+
+        f'</div>'
+        f'</div>'
+    )
+
+    return html
 
 
 st.markdown(
@@ -504,17 +460,17 @@ st.markdown(
 
 
 st.markdown(
-    """
-    <div style="
-        margin-top:10px;
-        padding:12px 14px;
-        border-top:1px solid #29251A;
-        color:#888888;
-        font-size:10px;
-        letter-spacing:0.5px;
-    ">
-        <span style="color:#6B5A20;">■</span>
-        A
+    '<div style="margin-top:10px;padding:12px 14px;'
+    'border-top:1px solid #29251A;color:#888888;'
+    'font-size:10px;letter-spacing:0.5px;">'
+    '<span style="color:#6B5A20;">■</span> ANTERIOR'
+    '&nbsp;&nbsp;&nbsp;&nbsp;'
+    '<span style="color:#D4AF37;">■</span> ACTUAL'
+    '&nbsp;&nbsp;&nbsp;&nbsp;'
+    '<span style="color:#FFFFFF;">│</span> OBJETIVO'
+    '</div>',
+    unsafe_allow_html=True
+)
 
 # DIRECCIÓN GENERAL
 st.subheader("GENERAL MARKET DIRECTION")
