@@ -461,97 +461,87 @@ jolts_estado, jolts_color, jolts_delta = macro_signal(
 )
 
 
-def signal_card(
-    nombre,
-    estado,
-    color,
-    delta,
-    unidad,
-    decimales=2
-):
+def signal_card(nombre, estado, color, delta, unidad, decimales=2):
     if decimales == 0:
         delta_txt = f"{delta:+,.0f}{unidad}"
     else:
         delta_txt = f"{delta:+,.2f}{unidad}"
 
     return (
-        f'<div style="'
-        f'flex:1;'
-        f'padding:18px;'
-        f'background:#080808;'
-        f'border:1px solid #292929;'
-        f'border-radius:8px;'
-        f'text-align:center;">'
+        '<div style="'
+        'padding:18px;'
+        'background:#080808;'
+        'border:1px solid #292929;'
+        'border-radius:8px;'
+        'text-align:center;">'
 
-        f'<div style="'
-        f'color:#8A8F98;'
-        f'font-size:10px;'
-        f'letter-spacing:1px;'
-        f'margin-bottom:8px;">'
-        f'{nombre}'
-        f'</div>'
+        '<div style="'
+        'color:#8A8F98;'
+        'font-size:10px;'
+        'letter-spacing:1px;'
+        'margin-bottom:8px;">'
+        + nombre +
+        '</div>'
 
-        f'<div style="'
-        f'color:{color};'
-        f'font-size:15px;'
-        f'font-weight:bold;'
-        f'margin-bottom:8px;">'
-        f'{estado}'
-        f'</div>'
+        '<div style="'
+        'color:' + color + ';'
+        'font-size:15px;'
+        'font-weight:bold;'
+        'margin-bottom:8px;">'
+        + estado +
+        '</div>'
 
-        f'<div style="'
-        f'color:#D4AF37;'
-        f'font-size:13px;'
-        f'font-weight:bold;">'
-        f'{delta_txt}'
-        f'</div>'
+        '<div style="'
+        'color:#D4AF37;'
+        'font-size:13px;'
+        'font-weight:bold;">'
+        + delta_txt +
+        '</div>'
 
-        f'</div>'
+        '</div>'
     )
 
 
-macro_signals_html = (
-    '<div style="'
-    'display:flex;'
-    'gap:12px;'
-    'margin-top:10px;'
-    'margin-bottom:20px;">'
+col1, col2, col3 = st.columns(3)
 
-    + signal_card(
-        "PCE",
-        pce_estado,
-        pce_color,
-        pce_delta,
-        " pp",
-        2
+with col1:
+    st.markdown(
+        signal_card(
+            "PCE",
+            pce_estado,
+            pce_color,
+            pce_delta,
+            " pp",
+            2
+        ),
+        unsafe_allow_html=True
     )
 
-    + signal_card(
-        "DESEMPLEO",
-        desempleo_estado,
-        desempleo_color,
-        desempleo_delta,
-        " pp",
-        2
+with col2:
+    st.markdown(
+        signal_card(
+            "DESEMPLEO",
+            desempleo_estado,
+            desempleo_color,
+            desempleo_delta,
+            " pp",
+            2
+        ),
+        unsafe_allow_html=True
     )
 
-    signal_card(
-    "JOLTS",
-    jolts_estado,
-    jolts_color,
-    jolts_delta,
-    "k",
-    0
-)
-
-    + '</div>'
-)
-
-
-st.markdown(
-    macro_signals_html,
-    unsafe_allow_html=True
-)
+with col3:
+    st.markdown(
+        signal_card(
+            "JOLTS",
+            jolts_estado,
+            jolts_color,
+            jolts_delta,
+            "k",
+            0
+        ),
+        unsafe_allow_html=True
+    )
 
 # ACTIVOS
 st.subheader("ASSET SIGNALS")
