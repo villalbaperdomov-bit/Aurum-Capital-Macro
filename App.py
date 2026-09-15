@@ -582,6 +582,83 @@ st.markdown(
 
 
 # JUSTIFICACIÓN TÉCNICA
-st.subheader("TECHNICAL JUSTIFICATION")
+st.markdown(
+    '<div style="'
+    'margin-top:24px;'
+    'margin-bottom:10px;'
+    'color:#FFFFFF;'
+    'font-size:22px;'
+    'font-weight:700;'
+    'letter-spacing:0.5px;">'
+    'JUSTIFICACIÓN TÉCNICA'
+    '</div>',
+    unsafe_allow_html=True
+)
 
-st.info(current["justificacion_tecnica"])
+
+if pce_delta < 0:
+    pce_lectura = "desinflación marginal"
+elif pce_delta > 0:
+    pce_lectura = "mayor presión inflacionaria"
+else:
+    pce_lectura = "inflación estable"
+
+
+if desempleo_delta < 0:
+    desempleo_lectura = "descenso del desempleo"
+elif desempleo_delta > 0:
+    desempleo_lectura = "aumento del desempleo"
+else:
+    desempleo_lectura = "desempleo estable"
+
+
+if jolts_delta > 0:
+    jolts_lectura = "mayor demanda laboral"
+elif jolts_delta < 0:
+    jolts_lectura = "menor demanda laboral"
+else:
+    jolts_lectura = "demanda laboral estable"
+
+
+justificacion_html = (
+    '<div style="'
+    'padding:18px 20px;'
+    'background:#080808;'
+    'border:1px solid #292929;'
+    'border-radius:8px;'
+    'color:#FFFFFF;'
+    'font-size:13px;'
+    'line-height:1.7;">'
+
+    '<div>PCE: '
+    f'{pce_actual:.2f}% '
+    f'({pce_delta:+.2f} pp) → {pce_lectura}.'
+    '</div>'
+
+    '<div>Desempleo: '
+    f'{desempleo_actual:.2f}% '
+    f'({desempleo_delta:+.2f} pp) → {desempleo_lectura}.'
+    '</div>'
+
+    '<div>JOLTS: '
+    f'{jolts_actual / 1000:.2f}M '
+    f'({jolts_delta:+,.0f}k) → {jolts_lectura}.'
+    '</div>'
+
+    '<div style="'
+    'margin-top:10px;'
+    'padding-top:10px;'
+    'border-top:1px solid #202020;">'
+    'Lectura macro: los datos muestran la evolución reciente de inflación, '
+    'empleo y demanda laboral, sin convertirlos automáticamente en una '
+    'señal de compra o venta.'
+    '</div>'
+
+    '</div>'
+)
+
+
+st.markdown(
+    justificacion_html,
+    unsafe_allow_html=True
+)
