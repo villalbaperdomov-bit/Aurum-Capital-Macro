@@ -428,10 +428,6 @@ mostrar_macro(
 )
 
 
-st.caption(
-    "🟢 SUBIENDO    🔴 BAJANDO    ⚪ ESTABLE    |    "
-    "ACTUAL = dorado    |    OBJETIVO = referencia"
-)
     
 
 # INDICADORES MACRO
@@ -539,14 +535,14 @@ macro_signals_html = (
         2
     )
 
-    + signal_card(
-        "JOLTS",
-        jolts_estado,
-        jolts_color,
-        jolts_delta,
-        "",
-        0
-    )
+    signal_card(
+    "JOLTS",
+    jolts_estado,
+    jolts_color,
+    jolts_delta,
+    "k",
+    0
+)
 
     + '</div>'
 )
