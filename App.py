@@ -434,16 +434,128 @@ st.caption(
 )
     
 
-# DIRECCIÓN GENERAL
-st.subheader("GENERAL MARKET DIRECTION")
+# MACRO SIGNALS
+st.subheader("MACRO SIGNALS")
 
-direction_html = """<div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;margin-bottom:20px;">
-<div style="width:30%;padding:18px;text-align:center;border:1px solid #332A10;color:#555555;background:#090909;border-radius:6px;font-weight:bold;">VENTA</div>
-<div style="width:30%;padding:18px;text-align:center;border:1px solid #D4AF37;color:#D4AF37;background:#171306;border-radius:6px;font-weight:bold;box-shadow:0 0 15px rgba(212,175,55,0.15);">BAJISTA</div>
-<div style="width:30%;padding:18px;text-align:center;border:1px solid #332A10;color:#555555;background:#090909;border-radius:6px;font-weight:bold;">COMPRA</div>
-</div>"""
 
-st.markdown(direction_html, unsafe_allow_html=True)
+def macro_signal(anterior, actual):
+    delta = actual - anterior
+
+    if delta > 0:
+        return "↑ SUBIENDO", "#2ECC71", delta
+    elif delta < 0:
+        return "↓ BAJANDO", "#E05A5A", delta
+    else:
+        return "→ ESTABLE", "#A7ADB7", 0
+
+
+pce_estado, pce_color, pce_delta = macro_signal(
+    float(current["pce_anterior"]),
+    pce_actual
+)
+
+desempleo_estado, desempleo_color, desempleo_delta = macro_signal(
+    float(current["desempleo_anterior"]),
+    desempleo_actual
+)
+
+jolts_estado, jolts_color, jolts_delta = macro_signal(
+    int(current["jolts_anterior"]),
+    jolts_actual
+)
+
+
+def signal_card(
+    nombre,
+    estado,
+    color,
+    delta,
+    unidad,
+    decimales=2
+):
+    if decimales == 0:
+        delta_txt = f"{delta:+,.0f}{unidad}"
+    else:
+        delta_txt = f"{delta:+,.2f}{unidad}"
+
+    return (
+        f'<div style="'
+        f'flex:1;'
+        f'padding:18px;'
+        f'background:#080808;'
+        f'border:1px solid #292929;'
+        f'border-radius:8px;'
+        f'text-align:center;">'
+
+        f'<div style="'
+        f'color:#8A8F98;'
+        f'font-size:10px;'
+        f'letter-spacing:1px;'
+        f'margin-bottom:8px;">'
+        f'{nombre}'
+        f'</div>'
+
+        f'<div style="'
+        f'color:{color};'
+        f'font-size:15px;'
+        f'font-weight:bold;'
+        f'margin-bottom:8px;">'
+        f'{estado}'
+        f'</div>'
+
+        f'<div style="'
+        f'color:#D4AF37;'
+        f'font-size:13px;'
+        f'font-weight:bold;">'
+        f'{delta_txt}'
+        f'</div>'
+
+        f'</div>'
+    )
+
+
+macro_signals_html = (
+    '<div style="'
+    'display:flex;'
+    'gap:12px;'
+    'margin-top:10px;'
+    'margin-bottom:20px;">'
+
+    + signal_card(
+        "PCE",
+        pce_estado,
+        pce_color,
+        pce_delta,
+        " pp",
+        2
+    )
+
+    + signal_card(
+        "DESEMPLEO",
+        desempleo_estado,
+        desempleo_color,
+        desempleo_delta,
+        " pp",
+        2
+    )
+
+    + signal_card(
+        "JOLTS",
+        jolts_estado,
+        jolts_color,
+        jolts_delta,
+        "",
+        0
+    )
+
+    + '</div>'
+)
+
+
+st.markdown(
+    macro_signals_html,
+    unsafe_allow_html=True
+)
 
 # ACTIVOS
 st.subheader("ASSET SIGNALS")
