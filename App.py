@@ -445,122 +445,141 @@ def macro_signal(anterior, actual):
         return "→ ESTABLE", "#A7ADB7", 0
 
 
+pce_anterior = float(current["pce_anterior"])
+desempleo_anterior = float(current["desempleo_anterior"])
+jolts_anterior = int(current["jolts_anterior"])
+
 pce_estado, pce_color, pce_delta = macro_signal(
-    float(current["pce_anterior"]),
+    pce_anterior,
     pce_actual
 )
 
 desempleo_estado, desempleo_color, desempleo_delta = macro_signal(
-    float(current["desempleo_anterior"]),
+    desempleo_anterior,
     desempleo_actual
 )
 
 jolts_estado, jolts_color, jolts_delta = macro_signal(
-    int(current["jolts_anterior"]),
+    jolts_anterior,
     jolts_actual
 )
 
 
-def signal_card(nombre, estado, color, delta, unidad, decimales=2):
-    if decimales == 0:
-        delta_txt = f"{delta:+,.0f}{unidad}"
-    else:
-        delta_txt = f"{delta:+,.2f}{unidad}"
-
+def macro_card(
+    nombre,
+    estado,
+    estado_color,
+    actual,
+    delta_text,
+    objetivo_text,
+    lectura
+):
     return (
         '<div style="'
+        'flex:1;'
         'padding:18px;'
         'background:#080808;'
         'border:1px solid #292929;'
-        'border-radius:8px;'
-        'text-align:center;">'
+        'border-radius:9px;'
+        'min-height:180px;'
+        'box-sizing:border-box;">'
 
         '<div style="'
-        'color:#8A8F98;'
-        'font-size:10px;'
-        'letter-spacing:1px;'
-        'margin-bottom:8px;">'
+        'color:#D4AF37;'
+        'font-size:12px;'
+        'font-weight:bold;'
+        'letter-spacing:1.5px;'
+        'margin-bottom:10px;">'
         + nombre +
         '</div>'
 
         '<div style="'
-        'color:' + color + ';'
-        'font-size:15px;'
+        'color:' + estado_color + ';'
+        'font-size:12px;'
         'font-weight:bold;'
-        'margin-bottom:8px;">'
+        'margin-bottom:12px;">'
         + estado +
         '</div>'
 
         '<div style="'
+        'color:#F0F0F0;'
+        'font-size:25px;'
+        'font-weight:bold;'
+        'margin-bottom:6px;">'
+        + actual +
+        '</div>'
+
+        '<div style="'
         'color:#D4AF37;'
-        'font-size:13px;'
-        'font-weight:bold;">'
-        + delta_txt +
+        'font-size:12px;'
+        'font-weight:bold;'
+        'margin-bottom:12px;">'
+        + delta_text +
+        '</div>'
+
+        '<div style="'
+        'color:#42D9FF;'
+        'font-size:10px;'
+        'margin-bottom:10px;">'
+        + objetivo_text +
+        '</div>'
+
+        '<div style="'
+        'border-top:1px solid #202020;'
+        'padding-top:10px;'
+        'color:#A7ADB7;'
+        'font-size:11px;'
+        'line-height:1.4;">'
+        + lectura +
         '</div>'
 
         '</div>'
     )
 
 
-col1, col2, col3 = st.columns(3)
+pce_card = macro_card(
+    "PCE",
+    pce_estado,
+    pce_color,
+    f"{pce_actual:.2f}%",
+    f"Δ {pce_delta:+.2f} pp",
+    f"OBJETIVO {float(str(current['pce_meta']).replace('%', '')):.2f}%",
+    "Desinflación marginal"
+)
 
-with col1:
-    st.markdown(
-        signal_card(
-            "PCE",
-            pce_estado,
-            pce_color,
-            pce_delta,
-            " pp",
-            2
-        ),
-        unsafe_allow_html=True
-    )
 
-with col2:
-    st.markdown(
-        signal_card(
-            "DESEMPLEO",
-            desempleo_estado,
-            desempleo_color,
-            desempleo_delta,
-            " pp",
-            2
-        ),
-        unsafe_allow_html=True
-    )
+desempleo_card = macro_card(
+    "DESEMPLEO",
+    desempleo_estado,
+    desempleo_color,
+    f"{desempleo_actual:.2f}%",
+    f"Δ {desempleo_delta:+.2f} pp",
+    f"OBJETIVO {float(str(current['desempleo_objetivo']).replace('%', '')):.2f}%",
+    "Mercado laboral estable"
+)
 
-with col3:
-    st.markdown(
-        signal_card(
-            "JOLTS",
-            jolts_estado,
-            jolts_color,
-            jolts_delta,
-            "k",
-            0
-        ),
-        unsafe_allow_html=True
-    )
 
-# ACTIVOS
-st.subheader("ASSET SIGNALS")
+jolts_card = macro_card(
+    "JOLTS",
+    jolts_estado,
+    jolts_color,
+    f"{jolts_actual / 1000:.2f}M",
+    f"Δ {jolts_delta:+,.0f}k",
+    "SIN OBJETIVO",
+    "Mayor demanda laboral"
+)
 
-assets = ["GOLD", "SILVER", "NQ100", "US30", "BTC"]
 
-cols = st.columns(5)
+st.markdown(
+    '<div style="display:flex;gap:12px;margin-top:10px;margin-bottom:10px;">'
+    + pce_card
+    + desempleo_card
+    + jolts_card
+    + '</div>',
+    unsafe_allow_html=True
+)
 
-for col, asset in zip(cols, assets):
-    with col:
-        asset_html = f"""<div style="background:#090909;border:1px solid #332A10;border-radius:8px;padding:16px 8px;text-align:center;">
-<div style="color:#D4AF37;font-size:12px;letter-spacing:2px;font-weight:bold;margin-bottom:14px;">{asset}</div>
-<div style="display:flex;gap:4px;justify-content:center;">
-<div style="flex:1;padding:8px 2px;border:1px solid #222222;color:#555555;font-size:9px;">VENTA</div>
-<div style="flex:1;padding:8px 2px;border:1px solid #222222;color:#555555;font-size:9px;">NEUTRAL</div>
-<div style="flex:1;padding:8px 2px;border:1px solid #D4AF37;color:#D4AF37;background:#171306;font-size:9px;font-weight:bold;box-shadow:0 0 10px rgba(212,175,55,0.12);">COMPRA</div>
-</div>
-</div>"""
-        st.markdown(asset_html, unsafe_allow_html=True)
+
 
 # JUSTIFICACIÓN TÉCNICA
 st.subheader("TECHNICAL JUSTIFICATION")
