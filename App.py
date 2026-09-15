@@ -434,8 +434,8 @@ st.caption(
 )
     
 
-# MACRO SIGNALS
-st.subheader("MACRO SIGNALS")
+# INDICADORES MACRO
+st.subheader("INDICADORES MACRO")
 
 
 def macro_signal(anterior, actual):
